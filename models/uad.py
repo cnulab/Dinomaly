@@ -35,25 +35,13 @@ class ViTill(nn.Module):
         self.mask_neighbor_size = mask_neighbor_size
 
     def forward(self, x):
-        x = self.encoder.prepare_tokens(x)
-        en_list = []
-        for i, blk in enumerate(self.encoder.blocks):
-            if i <= self.target_layers[-1]:
-                if i in self.encoder_require_grad_layer:
-                    x = blk(x)
-                else:
-                    with torch.no_grad():
-                        x = blk(x)
-            else:
-                continue
-            if i in self.target_layers:
-                en_list.append(x)
-        side = int(math.sqrt(en_list[0].shape[1] - 1 - self.encoder.num_register_tokens))
 
-        if self.remove_class_token:
-            en_list = [e[:, 1 + self.encoder.num_register_tokens:, :] for e in en_list]
+        en_list = self.encoder.get_intermediate_layers(x, n=self.target_layers, norm=False)
+
+        side = int(math.sqrt(en_list[0].shape[1]))
 
         x = self.fuse_feature(en_list)
+
         for i, blk in enumerate(self.bottleneck):
             x = blk(x)
 
@@ -71,13 +59,11 @@ class ViTill(nn.Module):
         en = [self.fuse_feature([en_list[idx] for idx in idxs]) for idxs in self.fuse_layer_encoder]
         de = [self.fuse_feature([de_list[idx] for idx in idxs]) for idxs in self.fuse_layer_decoder]
 
-        if not self.remove_class_token:  # class tokens have not been removed above
-            en = [e[:, 1 + self.encoder.num_register_tokens:, :] for e in en]
-            de = [d[:, 1 + self.encoder.num_register_tokens:, :] for d in de]
-
         en = [e.permute(0, 2, 1).reshape([x.shape[0], -1, side, side]).contiguous() for e in en]
         de = [d.permute(0, 2, 1).reshape([x.shape[0], -1, side, side]).contiguous() for d in de]
+
         return en, de
+
 
     def fuse_feature(self, feat_list):
         return torch.stack(feat_list, dim=1).mean(dim=1)
