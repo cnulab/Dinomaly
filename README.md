@@ -1,196 +1,165 @@
 <div align="center">
 
-# Dinomaly: The Less Is More Philosophy in Multi-Class Unsupervised Anomaly Detection
-
-### CVPR 2025 
-[arxiv](https://arxiv.org/abs/2405.14325) | [cvpr](https://openaccess.thecvf.com/content/CVPR2025/papers/Guo_Dinomaly_The_Less_Is_More_Philosophy_in_Multi-Class_Unsupervised_Anomaly_CVPR_2025_paper.pdf)
-
+# Dinomaly with DinoV3
 </div>
-
-PyTorch Implementation of CVPR 2025
-"Dinomaly: The Less Is More Philosophy in Multi-Class Unsupervised Anomaly Detection".
-
-
-The first multi-class UAD model that can compete with single-class SOTAs !!!
-
-Give me a ⭐️ if you like it.
-
-![fig1](https://github.com/user-attachments/assets/0bb2e555-656f-4218-b93b-844b5894e429)
-
-
-## News
- - 05.2024: Arxiv preprint and github code released🚀
- 
- - 09.2024: Rejected by NeurIPS 2024 with 5 positive scores and no negative score, because "AC: lack of novelty"😭. Wish me good luck.
- 
- - 02.2025: Accepted by CVPR 2025🎉
- 
- - 07.2025: Spoil alert: We will come back with Dinomly-2😛
-
- - 07.2025: Dinomaly has been integrated in Intel open-edge [Anomalib](https://github.com/open-edge-platform/anomalib) in v2.1.0. Great thanks to the contributors for the nice reproduction and integration. Anomalib is a comprehensive library for benchmarking, developing and deploying deep learning anomaly detection algorithms.
-
-
-## Abstract
-
-Recent studies highlighted a practical setting of unsupervised anomaly detection (UAD) that builds a unified model for multi-class images. Despite various advancements addressing this challenging task, the detection performance under the multi-class setting still lags far behind state-of-the-art class-separated models. Our research aims to bridge this substantial performance gap. In this paper, we introduce a minimalistic reconstruction-based anomaly detection framework, namely Dinomaly, which leverages pure Transformer architectures without relying on complex designs, additional modules, or specialized tricks. Given this powerful framework consisted of only Attentions and MLPs, we found four simple components that are essential to multi-class anomaly detection: (1) Foundation Transformers that extracts universal and discriminative features, (2) Noisy Bottleneck where pre-existing Dropouts do all the noise injection tricks, (3) Linear Attention that naturally cannot focus, and (4) Loose Reconstruction that does not force layer-to-layer and point-by-point reconstruction. Extensive experiments are conducted across popular anomaly detection benchmarks including MVTec-AD, VisA, and Real-IAD. Our proposed Dinomaly achieves impressive image-level AUROC of 99.6%, 98.7%, and 89.3% on the three datasets respectively (99.8%, 98.9%, 90.1% with ViT-L), which is not only superior to state-of-the-art multi-class UAD methods, but also achieves the most advanced class-separated UAD records.
-
-## 1. Environments
-
-Create a new conda environment and install required packages.
-
+Cuda: 12.8    
+  
+Torch: 2.7.0+cu128   
+  
+For DinoV3/Base-16  
 ```
-conda create -n my_env python=3.8.12
-conda activate my_env
-pip install -r requirements.txt
-```
-Experiments are conducted on NVIDIA GeForce RTX 3090 (24GB). Same GPU and package version are recommended. 
+python dinomaly_mvtec_uni_base.py
 
-## 2. Prepare Datasets
-Noted that `../` is the upper directory of Dinomaly code. It is where we keep all the datasets by default.
-You can also alter it according to your need, just remember to modify the `data_path` in the code. 
-
-### MVTec AD
-
-Download the MVTec-AD dataset from [URL](https://www.mvtec.com/company/research/datasets/mvtec-ad).
-Unzip the file to `../mvtec_anomaly_detection`.
-```
-|-- mvtec_anomaly_detection
-    |-- bottle
-    |-- cable
-    |-- capsule
-    |-- ....
-```
-
-
-### VisA
-
-Download the VisA dataset from [URL](https://github.com/amazon-science/spot-diff).
-Unzip the file to `../VisA/`. Preprocess the dataset to `../VisA_pytorch/` in 1-class mode by their official splitting 
-[code](https://github.com/amazon-science/spot-diff).
-
-You can also run the following command for preprocess, which is the same to their official code.
-
-```
-python ./prepare_data/prepare_visa.py --split-type 1cls --data-folder ../VisA --save-folder ../VisA_pytorch --split-file ./prepare_data/split_csv/1cls.csv
-```
-`../VisA_pytorch` will be like:
-```
-|-- VisA_pytorch
-    |-- 1cls
-        |-- candle
-            |-- ground_truth
-            |-- test
-                    |-- good
-                    |-- bad
-            |-- train
-                    |-- good
-        |-- capsules
-        |-- ....
-```
- 
-### Real-IAD
-Contact the authors of Real-IAD [URL](https://realiad4ad.github.io/Real-IAD/) to get the net disk link.
-
-Download and unzip `realiad_1024` and `realiad_jsons` in `../Real-IAD`.
-`../Real-IAD` will be like:
-```
-|-- Real-IAD
-    |-- realiad_1024
-        |-- audiokack
-        |-- bottle_cap
-        |-- ....
-    |-- realiad_jsons
-        |-- realiad_jsons
-        |-- realiad_jsons_sv
-        |-- realiad_jsons_fuiad_0.0
-        |-- ....
+train image number:3629
+iter [226/10000], loss:0.1372
+iter [452/10000], loss:0.0592
+iter [678/10000], loss:0.0489
+iter [904/10000], loss:0.0447
+iter [1130/10000], loss:0.0411
+iter [1356/10000], loss:0.0400
+iter [1582/10000], loss:0.0399
+iter [1808/10000], loss:0.0395
+iter [2034/10000], loss:0.0555
+iter [2260/10000], loss:0.0414
+iter [2486/10000], loss:0.0393
+iter [2712/10000], loss:0.0385
+iter [2938/10000], loss:0.0552
+iter [3164/10000], loss:0.0455
+iter [3390/10000], loss:0.0391
+iter [3616/10000], loss:0.0377
+iter [3842/10000], loss:0.0372
+iter [4068/10000], loss:0.0368
+iter [4294/10000], loss:0.0368
+iter [4520/10000], loss:0.0360
+iter [4746/10000], loss:0.0359
+iter [4972/10000], loss:0.0354
+carpet: I-Auroc:0.9992, I-AP:0.9998, I-F1:0.9944, P-AUROC:0.9955, P-AP:0.7875, P-F1:0.7632, P-AUPRO:0.9830
+grid: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9932, P-AP:0.5564, P-F1:0.5672, P-AUPRO:0.9623
+leather: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9944, P-AP:0.6193, P-F1:0.5693, P-AUPRO:0.9689
+tile: I-Auroc:0.9986, I-AP:0.9995, I-F1:0.9940, P-AUROC:0.9879, P-AP:0.8730, P-F1:0.8116, P-AUPRO:0.9210
+wood: I-Auroc:0.9833, I-AP:0.9947, I-F1:0.9752, P-AUROC:0.9756, P-AP:0.7952, P-F1:0.7264, P-AUPRO:0.9390
+bottle: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9902, P-AP:0.8864, P-F1:0.8106, P-AUPRO:0.9646
+cable: I-Auroc:0.9983, I-AP:0.9990, I-F1:0.9945, P-AUROC:0.9847, P-AP:0.7405, P-F1:0.7225, P-AUPRO:0.9434
+capsule: I-Auroc:0.9737, I-AP:0.9938, I-F1:0.9820, P-AUROC:0.9873, P-AP:0.6011, P-F1:0.5903, P-AUPRO:0.9694
+hazelnut: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9952, P-AP:0.8358, P-F1:0.8013, P-AUPRO:0.9717
+metal_nut: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9769, P-AP:0.8535, P-F1:0.8781, P-AUPRO:0.9612
+pill: I-Auroc:0.9839, I-AP:0.9972, I-F1:0.9823, P-AUROC:0.9738, P-AP:0.7526, P-F1:0.7056, P-AUPRO:0.9732
+screw: I-Auroc:0.9715, I-AP:0.9912, I-F1:0.9520, P-AUROC:0.9938, P-AP:0.5957, P-F1:0.5909, P-AUPRO:0.9711
+toothbrush: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9925, P-AP:0.6426, P-F1:0.6878, P-AUPRO:0.9586
+transistor: I-Auroc:0.9867, I-AP:0.9800, I-F1:0.9398, P-AUROC:0.9267, P-AP:0.6087, P-F1:0.5797, P-AUPRO:0.7481
+zipper: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9922, P-AP:0.7925, P-F1:0.7467, P-AUPRO:0.9688
+Mean: I-Auroc:0.9930, I-AP:0.9970, I-F1:0.9876, P-AUROC:0.9840, P-AP:0.7294, P-F1:0.7034, P-AUPRO:0.9470
+iter [5198/10000], loss:0.0355
+iter [5424/10000], loss:0.0347
+iter [5650/10000], loss:0.0373
+iter [5876/10000], loss:0.0363
+iter [6102/10000], loss:0.0337
+iter [6328/10000], loss:0.0333
+iter [6554/10000], loss:0.0330
+iter [6780/10000], loss:0.0327
+iter [7006/10000], loss:0.0324
+iter [7232/10000], loss:0.0321
+iter [7458/10000], loss:0.0318
+iter [7684/10000], loss:0.0316
+iter [7910/10000], loss:0.0312
+iter [8136/10000], loss:0.0310
+iter [8362/10000], loss:0.0307
+iter [8588/10000], loss:0.0305
+iter [8814/10000], loss:0.0305
+iter [9040/10000], loss:0.0300
+iter [9266/10000], loss:0.0298
+iter [9492/10000], loss:0.0297
+iter [9718/10000], loss:0.0295
+iter [9944/10000], loss:0.0295
+iter [10000/10000], loss:0.0294
+carpet: I-Auroc:0.9992, I-AP:0.9998, I-F1:0.9944, P-AUROC:0.9953, P-AP:0.7811, P-F1:0.7592, P-AUPRO:0.9785
+grid: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9936, P-AP:0.5676, P-F1:0.5732, P-AUPRO:0.9627
+leather: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9945, P-AP:0.6033, P-F1:0.5726, P-AUPRO:0.9755
+tile: I-Auroc:0.9982, I-AP:0.9993, I-F1:0.9940, P-AUROC:0.9855, P-AP:0.8543, P-F1:0.7956, P-AUPRO:0.9156
+wood: I-Auroc:0.9895, I-AP:0.9967, I-F1:0.9752, P-AUROC:0.9762, P-AP:0.7910, P-F1:0.7213, P-AUPRO:0.9370
+bottle: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9911, P-AP:0.8910, P-F1:0.8203, P-AUPRO:0.9678
+cable: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9882, P-AP:0.7738, P-F1:0.7507, P-AUPRO:0.9501
+capsule: I-Auroc:0.9852, I-AP:0.9967, I-F1:0.9864, P-AUROC:0.9885, P-AP:0.6222, P-F1:0.5970, P-AUPRO:0.9734
+hazelnut: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9951, P-AP:0.8334, P-F1:0.7899, P-AUPRO:0.9727
+metal_nut: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9746, P-AP:0.8330, P-F1:0.8719, P-AUPRO:0.9537
+pill: I-Auroc:0.9869, I-AP:0.9978, I-F1:0.9823, P-AUROC:0.9765, P-AP:0.7502, P-F1:0.7086, P-AUPRO:0.9729
+screw: I-Auroc:0.9809, I-AP:0.9940, I-F1:0.9610, P-AUROC:0.9949, P-AP:0.6272, P-F1:0.6100, P-AUPRO:0.9786
+toothbrush: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9923, P-AP:0.6323, P-F1:0.6834, P-AUPRO:0.9608
+transistor: I-Auroc:0.9871, I-AP:0.9810, I-F1:0.9512, P-AUROC:0.9377, P-AP:0.6359, P-F1:0.6005, P-AUPRO:0.7639
+zipper: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9935, P-AP:0.8110, P-F1:0.7599, P-AUPRO:0.9740
+Mean: I-Auroc:0.9951, I-AP:0.9977, I-F1:0.9896, P-AUROC:0.9852, P-AP:0.7338, P-F1:0.7076, P-AUPRO:0.9491
 ```
 
-## 3. Run Experiments
-Multi-Class Setting
+For DinoV3/Large-16
 ```
-python dinomaly_mvtec_uni.py --data_path ../mvtec_anomaly_detection
+python dinomaly_mvtec_uni_large.py
+
+
+train image number:3629
+iter [302/10000], loss:0.1136
+iter [604/10000], loss:0.0469
+iter [906/10000], loss:0.0514
+iter [1208/10000], loss:0.0429
+iter [1510/10000], loss:0.0370
+iter [1812/10000], loss:0.0352
+iter [2114/10000], loss:0.0342
+iter [2416/10000], loss:0.0394
+iter [2718/10000], loss:0.0335
+iter [3020/10000], loss:0.0323
+iter [3322/10000], loss:0.0320
+iter [3624/10000], loss:0.0316
+iter [3926/10000], loss:0.0351
+iter [4228/10000], loss:0.0310
+iter [4530/10000], loss:0.0300
+iter [4832/10000], loss:0.0299
+carpet: I-Auroc:0.9956, I-AP:0.9988, I-F1:0.9944, P-AUROC:0.9943, P-AP:0.7187, P-F1:0.7348, P-AUPRO:0.9759
+grid: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9941, P-AP:0.5697, P-F1:0.5921, P-AUPRO:0.9675
+leather: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9951, P-AP:0.6242, P-F1:0.6159, P-AUPRO:0.9736
+tile: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9891, P-AP:0.8707, P-F1:0.8201, P-AUPRO:0.9399
+wood: I-Auroc:0.9860, I-AP:0.9955, I-F1:0.9756, P-AUROC:0.9768, P-AP:0.8030, P-F1:0.7321, P-AUPRO:0.9407
+bottle: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9925, P-AP:0.9062, P-F1:0.8454, P-AUPRO:0.9683
+cable: I-Auroc:0.9991, I-AP:0.9994, I-F1:0.9892, P-AUROC:0.9852, P-AP:0.7092, P-F1:0.7069, P-AUPRO:0.9458
+capsule: I-Auroc:0.9848, I-AP:0.9965, I-F1:0.9863, P-AUROC:0.9898, P-AP:0.6073, P-F1:0.5957, P-AUPRO:0.9757
+hazelnut: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9960, P-AP:0.8507, P-F1:0.8178, P-AUPRO:0.9768
+metal_nut: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9874, P-AP:0.9103, P-F1:0.9041, P-AUPRO:0.9643
+pill: I-Auroc:0.9918, I-AP:0.9986, I-F1:0.9893, P-AUROC:0.9822, P-AP:0.7864, P-F1:0.7175, P-AUPRO:0.9793
+screw: I-Auroc:0.9795, I-AP:0.9935, I-F1:0.9580, P-AUROC:0.9942, P-AP:0.5869, P-F1:0.5778, P-AUPRO:0.9696
+toothbrush: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9928, P-AP:0.6660, P-F1:0.6871, P-AUPRO:0.9591
+transistor: I-Auroc:0.9904, I-AP:0.9856, I-F1:0.9500, P-AUROC:0.9375, P-AP:0.6284, P-F1:0.5871, P-AUPRO:0.7951
+zipper: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9923, P-AP:0.7870, P-F1:0.7450, P-AUPRO:0.9696
+Mean: I-Auroc:0.9951, I-AP:0.9979, I-F1:0.9895, P-AUROC:0.9866, P-AP:0.7350, P-F1:0.7120, P-AUPRO:0.9534
+iter [5134/10000], loss:0.0293
+iter [5436/10000], loss:0.0288
+iter [5738/10000], loss:0.0281
+iter [6040/10000], loss:0.0279
+iter [6342/10000], loss:0.0275
+iter [6644/10000], loss:0.0281
+iter [6946/10000], loss:0.0270
+iter [7248/10000], loss:0.0260
+iter [7550/10000], loss:0.0258
+iter [7852/10000], loss:0.0254
+iter [8154/10000], loss:0.0250
+iter [8456/10000], loss:0.0248
+iter [8758/10000], loss:0.0245
+iter [9060/10000], loss:0.0243
+iter [9362/10000], loss:0.0241
+iter [9664/10000], loss:0.0239
+iter [9966/10000], loss:0.0238
+iter [10000/10000], loss:0.0240
+carpet: I-Auroc:0.9976, I-AP:0.9993, I-F1:0.9944, P-AUROC:0.9942, P-AP:0.7080, P-F1:0.7322, P-AUPRO:0.9754
+grid: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9945, P-AP:0.5874, P-F1:0.6043, P-AUPRO:0.9705
+leather: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9951, P-AP:0.6156, P-F1:0.6134, P-AUPRO:0.9773
+tile: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9881, P-AP:0.8636, P-F1:0.8099, P-AUPRO:0.9307
+wood: I-Auroc:0.9886, I-AP:0.9963, I-F1:0.9756, P-AUROC:0.9784, P-AP:0.7998, P-F1:0.7291, P-AUPRO:0.9471
+bottle: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9929, P-AP:0.9076, P-F1:0.8496, P-AUPRO:0.9714
+cable: I-Auroc:0.9996, I-AP:0.9998, I-F1:0.9946, P-AUROC:0.9893, P-AP:0.7648, P-F1:0.7488, P-AUPRO:0.9548
+capsule: I-Auroc:0.9848, I-AP:0.9966, I-F1:0.9817, P-AUROC:0.9899, P-AP:0.6223, P-F1:0.5970, P-AUPRO:0.9757
+hazelnut: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9960, P-AP:0.8469, P-F1:0.8148, P-AUPRO:0.9762
+metal_nut: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9852, P-AP:0.8797, P-F1:0.8972, P-AUPRO:0.9591
+pill: I-Auroc:0.9943, I-AP:0.9990, I-F1:0.9893, P-AUROC:0.9824, P-AP:0.7690, P-F1:0.7156, P-AUPRO:0.9783
+screw: I-Auroc:0.9840, I-AP:0.9949, I-F1:0.9658, P-AUROC:0.9956, P-AP:0.6348, P-F1:0.6084, P-AUPRO:0.9774
+toothbrush: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9918, P-AP:0.6164, P-F1:0.6612, P-AUPRO:0.9598
+transistor: I-Auroc:0.9946, I-AP:0.9915, I-F1:0.9756, P-AUROC:0.9443, P-AP:0.6379, P-F1:0.5923, P-AUPRO:0.8052
+zipper: I-Auroc:1.0000, I-AP:1.0000, I-F1:1.0000, P-AUROC:0.9932, P-AP:0.8014, P-F1:0.7544, P-AUPRO:0.9734
+Mean: I-Auroc:0.9962, I-AP:0.9985, I-F1:0.9918, P-AUROC:0.9874, P-AP:0.7370, P-F1:0.7152, P-AUPRO:0.9555
 ```
-```
-python dinomaly_visa_uni.py --data_path ../VisA_pytorch/1cls
-```
-```
-python dinomaly_realiad_uni.py --data_path ../Real-IAD
-```
-
-Conventional Class-Separted Setting
-```
-python dinomaly_mvtec_sep.py --data_path ../mvtec_anomaly_detection
-```
-```
-python dinomaly_visa_sep.py --data_path ../VisA_pytorch/1cls
-```
-```
-python dinomaly_realiad_sep.py --data_path ../Real-IAD
-```
-
-Training Unstability: The optimization can be unstable with loss spikes (e.g. ...0.05, 0.04, 0.04, **0.32**, **0.23**, 0.08...)
-, which can be harmful to performance. This occurs very very rare. If you see such loss spikes during training, consider change a random seed.
-
-## Results
-
-**A. Compare with MUAD SOTAs:**
-<div align="center">
-
-<img alt="image" src="https://github.com/user-attachments/assets/082922bb-e8f8-4efc-9597-2a7dc8577d6e" />
-
-<img width="869" height="482" alt="image" src="https://github.com/user-attachments/assets/9da30ae7-5c7f-4117-ad93-bf12f0fd98f0" />
-
-</div>
-
-
-
-**Dinomaly can perfectly scale with model size, input image size, and the choice of foundation model.**
-
-**B. Model Size:**
-<div align="center">
-
-<img width="400" height="220" alt="image" src="https://github.com/user-attachments/assets/6f388ab7-0b81-450b-ae13-358a00c74f3f" />
-
-<img width="865" height="190" alt="image" src="https://github.com/user-attachments/assets/a5d7c83f-bc64-4704-8607-a7a00cffe545" />
-<img width="700" alt="image" src="https://github.com/user-attachments/assets/5005caed-2294-4766-92ed-ee93df5c5428" />
-
-</div>
-
-
-**C. Input Size:**
-<div align="center">
-
-<img width="400" height="220" alt="image" src="https://github.com/user-attachments/assets/e9a324a3-7f26-4d69-8806-a183042a3388" />
-
-<img width="865" height="302" alt="image" src="https://github.com/user-attachments/assets/4f259320-2e4b-4796-aa7e-740bbd246d37" />
-
-</div>
-
-**D. Choice of Foundaiton Model:**
-<div align="center">
-
-<img width="400" height="220" alt="image" src="https://github.com/user-attachments/assets/a1ae0beb-ac5d-4926-94d4-4a99e07de03b" />
-
-<img width="865" height="474" alt="image" src="https://github.com/user-attachments/assets/8c95f29b-578e-481d-bf0c-75429f76158f" />
-
-</div>
-
-
-## Eval discrepancy of anomaly localization
-In our code implementation, we binarize the GT mask using gt.bool() after down-sampling, specifically gt[gt>0]=1. As pointed out in an issue, the previous common practice is to use gt[gt>0.5]=1. 
-The difference between these two binarization approaches is that gt[gt>0]=1 may result in anomaly regions being one pixel larger compared to gt[gt>0.5]=1. This difference does not affect image-level performance metrics, but it has a slight impact on pixel-level evaluation metrics. 
-
-We think gt[gt>0]=1 is a more reasonable choice. It can be seen as max pooling, so that in the down-sampled GT map, any position that corresponds to a region containing at least one anomaly pixel in the original map is marked as anomalous. If an anomaly region is extremely small in the original image (say 2 pixels), gt[gt>0.5]=1 will erase it while gt[gt>0]=1 can keep it.
-
-## Citation
-```
-@inproceedings{guo2025dinomaly,
-  title={Dinomaly: The less is more philosophy in multi-class unsupervised anomaly detection},
-  author={Guo, Jia and Lu, Shuai and Zhang, Weihang and Chen, Fang and Li, Huiqi and Liao, Hongen},
-  booktitle={Proceedings of the Computer Vision and Pattern Recognition Conference},
-  pages={20405--20415},
-  year={2025}
-}
-```
-
